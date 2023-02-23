@@ -37,8 +37,10 @@ public class MainActivity extends AppCompatActivity {
     Legend l;
     LineData dat;
     Retrofit retrofit;
+    int pc;
     // php Buymini.php
     private final String BASE_URL = "https://taewoooh88.cafe24.com/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
         chart.getAxisRight().setDrawAxisLine(false);
         chart.setData(dat);
 
-        yLAxis.setLabelCount(2,false);
-        xAxis.setLabelCount(2,false);
+        yLAxis.setLabelCount(2, false);
+        xAxis.setLabelCount(2, false);
 
         dat = chart.getData();
 
@@ -90,20 +92,20 @@ public class MainActivity extends AppCompatActivity {
                 dat.addDataSet(set);
             }
 
-//            dat.addEntry(new Entry(2017, 120000, 3), 0);
-//            dat.addEntry(new Entry(2018, 125000, 3), 0);
-//            dat.addEntry(new Entry(2019, 130000, 3), 0);
-//            dat.addEntry(new Entry(2020, 135000, 3), 0);
-//            dat.addEntry(new Entry(2021, 140000, 3), 0);
-//            dat.addEntry(new Entry(2022, 145000, 3), 0);
-            Buyminitongsin("래미안대치팰리스","34","84.99","11680","대치동");
+//            dat.addEntry(new Entry(1, 298000, 3), 0);
+//            dat.addEntry(new Entry(2, 330000, 3), 0);
+//            dat.addEntry(new Entry(3, 321000, 3), 0);
+//            dat.addEntry(new Entry(4, 308000, 3), 0);
+//            dat.addEntry(new Entry(5, 312000, 3), 0);
+//            dat.addEntry(new Entry(6, 304000, 3), 0);
+            Buyminitongsin("래미안대치팰리스", "34", "84.99", "11680", "대치동");
 
         }
 
 
-
         //  addEntry();
     }
+
     public void init() {
 
         retrofit = new Retrofit.Builder()
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
+
     public void Buyminitongsin(String name, String pyeungsu, String area, String jiyeokcode, String dong) { // 서버로 전달할 파라미터
 
 
@@ -127,14 +130,14 @@ public class MainActivity extends AppCompatActivity {
 
 
                 for (Upitem contributor : contributors) {
+                    pc++;
+
+                    String price = contributor.getPrice();
+                    String Ymd = contributor.getYmd();
 
 
-                    int up = contributor.getPrice();
 
-
-                   // priceitem.add(new Upitem(up));
-
-                    Log.e("price확인 - > ", ""+ up+" / "+priceitem.size());
+                    Log.e("price확인 - > ", "" + price + " / " + pc);
                 }
 
 
@@ -150,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
 
 
     private LineDataSet createSet() {
