@@ -1,8 +1,12 @@
 package com.example.graph;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -15,86 +19,134 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity {
-
+    ArrayList<Upitem> upitems = new ArrayList<>();
     private LineChart chart;
-   
+    XAxis xAxis;
+    YAxis yLAxis;
+    Description des;
+    Legend l;
+    LineData dat;
+    Retrofit retrofit;
 
+    private final String BASE_URL = "https://taewoooh88.cafe24.com/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        XAxis xAxis;
-
-        YAxis yLAxis;
         chart = (LineChart) findViewById(R.id.chart);
+        dat = new LineData();
+
         xAxis = chart.getXAxis();
         yLAxis = chart.getAxisLeft();
-        Description des = chart.getDescription();
+        des = chart.getDescription();
         des.setEnabled(false);
+        l = chart.getLegend();
+        l.setEnabled(false);
 
-
-        chart.setTouchEnabled(true);
+        chart.setTouchEnabled(false);
         chart.setClickable(false);
         chart.setDoubleTapToZoomEnabled(false);
         chart.setDoubleTapToZoomEnabled(false);
-
         chart.setDrawBorders(false);
         chart.setDrawGridBackground(false);
-
         chart.getDescription().setEnabled(false);
         chart.getLegend().setEnabled(false);
-
-        chart.getAxisLeft().setDrawGridLines(true);
-        chart.getAxisLeft().setDrawLabels(true);
-        chart.getAxisLeft().setDrawAxisLine(true);
-
+        chart.getAxisLeft().setDrawGridLines(false);
+        chart.getAxisLeft().setDrawLabels(false);
+        chart.getAxisLeft().setDrawAxisLine(false);
         chart.getXAxis().setDrawGridLines(false);
         chart.getXAxis().setDrawLabels(false);
         chart.getXAxis().setDrawAxisLine(false);
-
         chart.getAxisRight().setDrawGridLines(false);
         chart.getAxisRight().setDrawLabels(false);
         chart.getAxisRight().setDrawAxisLine(false);
-
+        chart.setData(dat);
 
         yLAxis.setLabelCount(2,false);
         xAxis.setLabelCount(2,false);
 
+        dat = chart.getData();
 
-        Legend l = chart.getLegend();
-        l.setEnabled(false);
-
-
-
-        LineData data = new LineData();
-        chart.setData(data);
-        addEntry();
-
-    }
-
-    private void addEntry() {
-        LineData data = chart.getData();
-       // data.setDrawValues(false);
-
-        if (data != null) {
-            ILineDataSet set = data.getDataSetByIndex(0);
+                if (dat != null) {
+            ILineDataSet set = dat.getDataSetByIndex(0);
 
             if (set == null) {
                 set = createSet();
-                data.addDataSet(set);
+                dat.addDataSet(set);
             }
-            data.addEntry(new Entry(2017, 120000, 3), 0);
-            data.addEntry(new Entry(2018, 125000, 3), 0);
-            data.addEntry(new Entry(2019, 130000, 3), 0);
-            data.addEntry(new Entry(2020, 135000, 3), 0);
-            data.addEntry(new Entry(2021, 140000, 3), 0);
-            data.addEntry(new Entry(2022, 145000, 3), 0);
-            data.notifyDataChanged();
+        dat.addEntry(new Entry(2017, 120000, 3), 0);
+        dat.addEntry(new Entry(2018, 125000, 3), 0);
+        dat.addEntry(new Entry(2019, 130000, 3), 0);
+        dat.addEntry(new Entry(2020, 135000, 3), 0);
+        dat.addEntry(new Entry(2021, 140000, 3), 0);
+        dat.addEntry(new Entry(2022, 145000, 3), 0);
 
-            chart.moveViewToX(data.getEntryCount());
-        }
+
+         }
+
+
+
+      //  addEntry();
+
     }
+    public void init() {
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+    public void Buyminichart(String name, String pyeungsu, String area, String jiyeokcode, String jibun) { // 서버로 전달할 파라미터
+        //upitems.clear();
+
+        init();
+        Upgithub BgitHub2 = retrofit.create(Upgithub.class);
+        Call<List<Upitem>> call = BgitHub2.contributors(name, pyeungsu, area, jiyeokcode, jibun);
+        call.enqueue(new Callback<List<Upitem>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            // 성공시
+            public void onResponse(Call<List<Upitem>> call, Response<List<Upitem>> result) {
+                List<Upitem> contributors = result.body();
+                // 받아온 리스트를 순회하면서
+
+
+                for (Upitem contributor : contributors) {
+
+
+                    int up = contributor.getUp();
+
+
+                    upitems.add(new Upitem(up));
+
+                    Log.e("up확인", ""+ upitems.get(0).getUp());
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Upitem>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "up 정보 받아오기 실패 다시 시도해주세요.", Toast.LENGTH_LONG)
+                        .show();
+
+
+            }
+        });
+
+    }
+
+
 
     private LineDataSet createSet() {
 
