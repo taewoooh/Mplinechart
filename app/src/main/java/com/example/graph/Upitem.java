@@ -12,32 +12,26 @@ import com.google.gson.annotations.SerializedName;
 public class Upitem {
 
 
-    public int getUp() {
-        return up;
+    public Upitem(int price) {
+        this.price = price;
     }
 
-    public void setUp(int up) {
-        this.up = up;
+    public int getPrice() {
+        return price;
     }
 
-    @SerializedName("up")
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    @SerializedName("price")
     @Expose
     public
-    int up;
+    int price;
 
 
 
 
-
-///////////////////////////////////////
-
-
-    public Upitem( int up) {
-
-        this.up = up;
-
-
-    }
 
 
 
