@@ -92,12 +92,12 @@ public class MainActivity extends AppCompatActivity {
                 dat.addDataSet(set);
             }
 
-//            dat.addEntry(new Entry(1, 298000, 3), 0);
-//            dat.addEntry(new Entry(2, 330000, 3), 0);
-//            dat.addEntry(new Entry(3, 321000, 3), 0);
-//            dat.addEntry(new Entry(4, 308000, 3), 0);
-//            dat.addEntry(new Entry(5, 312000, 3), 0);
-//            dat.addEntry(new Entry(6, 304000, 3), 0);
+            dat.addEntry(new Entry(1, 298000, 3), 0);
+            dat.addEntry(new Entry(2, 330000, 3), 0);
+            dat.addEntry(new Entry(3, 321000, 3), 0);
+            dat.addEntry(new Entry(4, 308000, 3), 0);
+            dat.addEntry(new Entry(5, 312000, 3), 0);
+            dat.addEntry(new Entry(6, 304000, 3), 0);
             Buyminitongsin("래미안대치팰리스", "34", "84.99", "11680", "대치동");
 
         }
